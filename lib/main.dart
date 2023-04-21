@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -144,13 +145,35 @@ class Home extends StatelessWidget {
                     return const MyItem();
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    if(index % 9 == 0){
+                    if (index % 9 == 0) {
                       return const AddItem();
                     }
                     return const SizedBox.shrink();
                   },
                 ),
-              )
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 232, 232, 232),
+                  borderRadius: BorderRadius.circular(1000),
+                ),
+                child: TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(CupertinoIcons.refresh_bold),
+                  label: Text(
+                    'به روز رسانی',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      const Color.fromARGB(255, 202, 193, 255),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
