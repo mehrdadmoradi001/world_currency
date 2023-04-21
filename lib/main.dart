@@ -24,11 +24,13 @@ class MyApp extends StatelessWidget {
             fontFamily: 'dana',
             fontSize: 14,
             fontWeight: FontWeight.w300,
+            color: Colors.black,
           ),
           bodySmall: TextStyle(
             fontFamily: 'dana',
             fontSize: 13,
             fontWeight: FontWeight.w300,
+            color: Colors.white,
           ),
         ),
       ),
@@ -77,32 +79,159 @@ class Home extends StatelessWidget {
           const SizedBox(width: 16),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/question.png',
-                  width: 22,
-                  height: 22,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/images/question.png',
+                    width: 22,
+                    height: 22,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'نرخ ارز آزاد چیست؟',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'نرخ ارزها در معاملات نقدی و رایج روزانه'
+                ' است معاملات نقدی معملاتی هستند که خریدار و فروشنده'
+                ' به محض انجام معامله، ارز و ریال را با هم تبادل میکنند.',
+                style: Theme.of(context).textTheme.labelSmall,
+                textDirection: TextDirection.rtl,
+              ),
+              const SizedBox(height: 24),
+              Container(
+                height: 35,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(1000),
+                  ),
+                  color: Color.fromARGB(255, 130, 130, 130),
                 ),
-                const SizedBox(width: 8),
-                 Text(
-                  'نرخ ارز آزاد چیست؟',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      'نام آزاد ارز',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      'قیمت',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      'تغییر',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 12),
-             Text(
-              'نرخ ارزها در معاملات نقدی و رایج روزانه'
-              ' است معاملات نقدی معملاتی هستند که خریدار و فروشنده'
-              ' به محض انجام معامله، ارز و ریال را با هم تبادل میکنند.',
-              style: Theme.of(context).textTheme.labelSmall,
-              textDirection: TextDirection.rtl,
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 350,
+                child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: 20,
+                  itemBuilder: (BuildContext context, int position) {
+                    return const MyItem();
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    if(index % 9 == 0){
+                      return const AddItem();
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MyItem extends StatelessWidget {
+  const MyItem({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+      child: Container(
+        width: double.infinity,
+        height: 50,
+        decoration: BoxDecoration(
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              blurRadius: 1.0,
+              color: Colors.grey,
             )
+          ],
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(1000),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'دلار',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            Text(
+              '160000',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            Text(
+              '+3',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AddItem extends StatelessWidget {
+  const AddItem({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+      child: Container(
+        width: double.infinity,
+        height: 50,
+        decoration: BoxDecoration(
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              blurRadius: 1.0,
+              color: Colors.grey,
+            )
+          ],
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(1000),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'تبلیغات',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ],
         ),
       ),
