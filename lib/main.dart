@@ -160,18 +160,37 @@ class Home extends StatelessWidget {
                   color: const Color.fromARGB(255, 232, 232, 232),
                   borderRadius: BorderRadius.circular(1000),
                 ),
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(CupertinoIcons.refresh_bold),
-                  label: Text(
-                    'به روز رسانی',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 202, 193, 255),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: TextButton.icon(
+                        onPressed: () => _showSnackBar(
+                            context, 'به روز رسانی با موفقیت انجام شد'),
+                        icon: const Icon(CupertinoIcons.refresh_bold),
+                        label: Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                          child: Text(
+                            'به روز رسانی',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 202, 193, 255),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(1000),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                     Text('آخرین به روز رسانی  ${_getTime()}'),
+                    const SizedBox(width: 8),
+                  ],
                 ),
               ),
             ],
@@ -180,6 +199,22 @@ class Home extends StatelessWidget {
       ),
     );
   }
+
+  String _getTime() {
+    return '20:45';
+  }
+}
+
+void _showSnackBar(BuildContext context, String msg) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        msg,
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
+      backgroundColor: Colors.green,
+    ),
+  );
 }
 
 class MyItem extends StatelessWidget {
