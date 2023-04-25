@@ -74,10 +74,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Currency> currency = [];
 
-  getResponse() {
+  Future getResponse() async{
     var url =
         "https://sasansafari.com/flutter/api.php?access_key=flutter123456";
-    http.get(Uri.parse(url)).then((value) {
+    var value = await http.get(Uri.parse(url));
       print(value.statusCode);
       if (value.statusCode == 200 && currency.isEmpty) {
         List jsonList = convert.jsonDecode(value.body);
@@ -94,7 +94,6 @@ class _HomeState extends State<Home> {
           }
         }
       }
-    });
   }
 
   @override
