@@ -74,32 +74,42 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Currency> currency = [];
 
-  Future getResponse() async{
+
+//get data from server
+  Future getResponse(BuildContext context) async {
     var url =
         "https://sasansafari.com/flutter/api.php?access_key=flutter123456";
     var value = await http.get(Uri.parse(url));
-      print(value.statusCode);
-      if (value.statusCode == 200 && currency.isEmpty) {
-        List jsonList = convert.jsonDecode(value.body);
-        if (jsonList.isNotEmpty) {
-          for (int i = 0; i < jsonList.length; i++) {
-            setState(() {
-              currency.add(Currency(
-                  id: jsonList[i]['id'],
-                  title: jsonList[i]['title'],
-                  price: jsonList[i]['price'],
-                  changes: jsonList[i]['changes'],
-                  status: jsonList[i]['status']));
-            });
-          }
+    //developer.log(value.body,name: 'getResponse12345');
+    print(value.statusCode);
+    if (value.statusCode == 200 && currency.isEmpty) {
+      _showSnackBar(context, 'به روز رسانی اطلاعات با موفقیت انجام شد');
+      List jsonList = convert.jsonDecode(value.body);
+      if (jsonList.isNotEmpty) {
+        for (int i = 0; i < jsonList.length; i++) {
+          setState(() {
+            currency.add(Currency(
+                id: jsonList[i]['id'],
+                title: jsonList[i]['title'],
+                price: jsonList[i]['price'],
+                changes: jsonList[i]['changes'],
+                status: jsonList[i]['status']));
+          });
         }
       }
+    }
+    return value;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getResponse(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    getResponse();
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       appBar: AppBar(
@@ -181,24 +191,14 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
+              //Listview & FutureBuilder
               SizedBox(
                 width: double.infinity,
                 height: 350,
-                child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: currency.length,
-                  itemBuilder: (BuildContext context, int position) {
-                    return MyItem(position, currency);
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    if (index % 9 == 0) {
-                      return const AddItem();
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
+                child: listFutureBuilder(context),
               ),
               const SizedBox(height: 12),
+              //update button box
               Container(
                 width: double.infinity,
                 height: 50,
@@ -212,8 +212,10 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       height: 50,
                       child: TextButton.icon(
-                        onPressed: () => _showSnackBar(
-                            context, 'به روز رسانی با موفقیت انجام شد'),
+                        onPressed: () {
+                          currency.clear();
+                          listFutureBuilder(context);
+                        },
                         icon: const Icon(CupertinoIcons.refresh_bold),
                         label: Padding(
                           padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
@@ -243,6 +245,31 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+    );
+  }
+
+  FutureBuilder<dynamic> listFutureBuilder(BuildContext context) {
+    return FutureBuilder(
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                itemCount: currency.length,
+                itemBuilder: (BuildContext context, int position) {
+                  return MyItem(position, currency);
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  if (index % 9 == 0) {
+                    return const AddItem();
+                  }
+                  return const SizedBox.shrink();
+                },
+              )
+            : const Center(
+                child: CircularProgressIndicator(),
+              );
+      },
+      future: getResponse(context),
     );
   }
 
